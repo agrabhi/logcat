@@ -11,8 +11,9 @@ var adbcmd = null;
 var filterString = null;
 var filterArray = null;
 var findstr = null;
-var folderLocation = null
+var folderLocation = null;
 var activeEditor = null;
+var LogcatAutoScroll = true;
 
 function doesExist(path) {
     try {
@@ -69,7 +70,9 @@ function appendText(data) {
             editBuilder.insert(newPos, data + os.EOL);
             
             var endPos = createPositon(newPos.line + 1, 0);
-            scroll(newPos, endPos);
+            if (LogcatAutoScroll == true) {
+                scroll(newPos, endPos);
+            }
         }
     );
 }
@@ -101,6 +104,7 @@ function loadConfiguration() {
     try {
         var config = vscode.workspace.getConfiguration('logcat');
         folderLocation = config.get('directory', null);
+        LogcatAutoScroll = config.get('autoscroll', true);
     }
     catch (ex) {
         console.log(ex);
